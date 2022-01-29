@@ -3,6 +3,7 @@
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$">
       <excludeFolder url="file://$MODULE_DIR$/venv/Python" />
+      <excludeFolder url="file://$MODULE_DIR$/venv" />
     </content>
     <content url="file://$MODULE_DIR$/venv/Python/Lib/site-packages/wds_files_general/sprite_types_gen" />
     <orderEntry type="inheritedJdk" />
