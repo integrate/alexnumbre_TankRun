@@ -6,8 +6,10 @@ world.set_back_color(70,70,70)
 player=sprite.add("battle_city_tanks",960,540,"tank_enemy_size2_purple2")
 y1 = random.randint(20, 1060)
 bull1=sprite.add("battle_city_items",0, y1,"bullet")
+sprite.set_size(bull1,30,30)
 y2 = random.randint(20, 1060)
 bull2=sprite.add("battle_city_items", 1920, y2,"bullet")
+sprite.set_size(bull2,30,30)
 health =5
 armor=0
 
@@ -24,25 +26,33 @@ armorup=sprite.add("battle_city_items",x2,y2,"block_gift_star")
 
 
 @wrap.always(5001)
-def healthplayer():
+def healthupp():
     global  health
     x1=random.randint(20,1900)
     y1=random.randint(20,1060)
     sprite.move_to(healthup,x1,y1)
+
+@wrap.always(100)
+def collidehealthup():
+    global health
     if sprite.is_collide_sprite(player,healthup):
+        sprite.move(healthup,2000,1200)
         health+=1
-        sprite_text.set_text(healthscore, str(health))
-        sprite_text.set_text(armorscore, str(armor))
-        sprite.move_to(healthup,2000,1200)
+
 
 
 @wrap.always(5002)
-def armorplayer():
-    global armor
-    x=random.randint(20,1900)
-    y=random.randint(20,1060)
+def armorupp():
+    x2=random.randint(20,1900)
+    y2=random.randint(20,1060)
     sprite.move_to(armorup,x2,y2)
+
+
+@wrap.always(100)
+def collidearmor():
+    global armor
     if sprite.is_collide_sprite(player,armorup):
+        sprite.move(armorup, 2000, 1200)
         armor+=1
         sprite_text.set_text(healthscore, str(health))
         sprite_text.set_text(armorscore, str(armor))
@@ -53,12 +63,13 @@ def armorplayer():
         sprite.set_height_percent(player, size2 + 10)
         size2 += 10
 
+
 @wrap.on_key_always(wrap.K_LEFT,50)
 def move_left():
     x=sprite.get_x(player)
     y=sprite.get_y(player)
     sprite.set_angle(player,270)
-    sprite.move_at_angle_dir(player,5)
+    sprite.move_at_angle_dir(player,10)
     if x <=20:
         sprite.move_to(player,20,y)
 
@@ -67,7 +78,7 @@ def move_right():
     x=sprite.get_x(player)
     y=sprite.get_y(player)
     sprite.set_angle(player,90)
-    sprite.move_at_angle_dir(player,5)
+    sprite.move_at_angle_dir(player,10)
     if x >=1900:
         sprite.move_to(player,1900,y)
 
@@ -76,7 +87,7 @@ def move_up():
     x=sprite.get_x(player)
     y=sprite.get_y(player)
     sprite.set_angle(player,0)
-    sprite.move_at_angle_dir(player,5)
+    sprite.move_at_angle_dir(player,10)
     if y <=20:
         sprite.move_to(player,x,20)
 
@@ -85,7 +96,7 @@ def move_up():
     x=sprite.get_x(player)
     y=sprite.get_y(player)
     sprite.set_angle(player,180)
-    sprite.move_at_angle_dir(player,5)
+    sprite.move_at_angle_dir(player,10)
     if y >=1060:
         sprite.move_to(player,x,1060)
 
@@ -136,7 +147,7 @@ def movebullet1():
             sprite.show(player)
             sprite_text.set_text(healthscore, str(health))
             sprite_text.set_text(armorscore, str(armor))
-            return
+
 
 
 @wrap.always(10000)
@@ -185,7 +196,7 @@ def movebullet2():
             sprite.show(player)
             sprite_text.set_text(healthscore, str(health))
             sprite_text.set_text(armorscore, str(armor))
-            return
+
 
 
 
