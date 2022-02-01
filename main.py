@@ -15,8 +15,8 @@ armor=0
 
 healthscore = sprite.add_text(str(health), 50, 50)
 armorscore = sprite.add_text(str(armor), 50, 70)
-sprite_text.set_text(healthscore,str(health))
-sprite_text.set_text(armorscore,str(armor))
+sprite_text.set_text(healthscore,"health: " + str(health))
+sprite_text.set_text(armorscore,"armor: "+str(armor))
 x1 = random.randint(20, 1900)
 y1 = random.randint(20, 1060)
 x2 = random.randint(20, 1900)
@@ -38,6 +38,8 @@ def collidehealthup():
     if sprite.is_collide_sprite(player,healthup):
         sprite.move(healthup,2000,1200)
         health+=1
+        sprite_text.set_text(healthscore, "health: " + str(health))
+        sprite_text.set_text(armorscore, "armor: " + str(armor))
 
 
 
@@ -54,14 +56,14 @@ def collidearmor():
     if sprite.is_collide_sprite(player,armorup):
         sprite.move(armorup, 2000, 1200)
         armor+=1
-        sprite_text.set_text(healthscore, str(health))
-        sprite_text.set_text(armorscore, str(armor))
         size=sprite.get_height_percent(player)
         sprite.set_height_percent(player,size+10)
         size+=10
         size2 = sprite.get_width_percent(player)
         sprite.set_height_percent(player, size2 + 10)
         size2 += 10
+        sprite_text.set_text(healthscore, "health: " + str(health))
+        sprite_text.set_text(armorscore, "armor: " + str(armor))
 
 
 @wrap.on_key_always(wrap.K_LEFT,50)
@@ -107,8 +109,8 @@ def bullet1():
     sprite.set_size(bull1,30,30)
     sprite.set_angle(bull1,90)
     y=random.randint(20,1060)
-    sprite.move_to(bull2,0,y)
     sprite.show(bull1)
+    sprite.move_to(bull1,0,y)
 
 
 @wrap.always(40)
@@ -145,8 +147,8 @@ def movebullet1():
             armor = 0
             health -=1
             sprite.show(player)
-            sprite_text.set_text(healthscore, str(health))
-            sprite_text.set_text(armorscore, str(armor))
+    sprite_text.set_text(healthscore, "health: " + str(health))
+    sprite_text.set_text(armorscore, "armor: " + str(armor))
 
 
 
@@ -194,11 +196,13 @@ def movebullet2():
             armor = 0
             health -=1
             sprite.show(player)
-            sprite_text.set_text(healthscore, str(health))
-            sprite_text.set_text(armorscore, str(armor))
+    sprite_text.set_text(healthscore, "health: " + str(health))
+    sprite_text.set_text(armorscore, "armor: " + str(armor))
 
 
 
 
+@wrap.always(100)
+def debug():
 
-
+    print(sprite.get_pos(bull1))
