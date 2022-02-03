@@ -9,6 +9,7 @@ bull1=sprite.add("battle_city_items",0, y1,"bullet")
 sprite.set_size(bull1,30,30)
 y2 = random.randint(20, 1060)
 bull2=sprite.add("battle_city_items", 1920, y2,"bullet")
+sprite.set_angle(bull2,270)
 sprite.set_size(bull2,30,30)
 health =5
 armor=0
@@ -27,7 +28,6 @@ armorup=sprite.add("battle_city_items",x2,y2,"block_gift_star")
 
 @wrap.always(5001)
 def healthupp():
-    global  health
     x1=random.randint(20,1900)
     y1=random.randint(20,1060)
     sprite.move_to(healthup,x1,y1)
@@ -39,7 +39,6 @@ def collidehealthup():
         sprite.move(healthup,2000,1200)
         health+=1
         sprite_text.set_text(healthscore, "health: " + str(health))
-        sprite_text.set_text(armorscore, "armor: " + str(armor))
 
 
 
@@ -58,11 +57,8 @@ def collidearmor():
         armor+=1
         size=sprite.get_height_percent(player)
         sprite.set_height_percent(player,size+10)
-        size+=10
         size2 = sprite.get_width_percent(player)
         sprite.set_height_percent(player, size2 + 10)
-        size2 += 10
-        sprite_text.set_text(healthscore, "health: " + str(health))
         sprite_text.set_text(armorscore, "armor: " + str(armor))
 
 
@@ -94,7 +90,7 @@ def move_up():
         sprite.move_to(player,x,20)
 
 @wrap.on_key_always(wrap.K_DOWN,50)
-def move_up():
+def move_down():
     x=sprite.get_x(player)
     y=sprite.get_y(player)
     sprite.set_angle(player,180)
@@ -102,21 +98,22 @@ def move_up():
     if y >=1060:
         sprite.move_to(player,x,1060)
 
+def podgotovka_pyli(bull,x):
+    y = random.randint(20, 1060)
+    sprite.show(bull)
+    sprite.move_to(bull, x, y)
 
 @wrap.always(10000)
-def bullet1():
-    global bull1
-    sprite.set_size(bull1,30,30)
-    sprite.set_angle(bull1,90)
-    y=random.randint(20,1060)
-    sprite.show(bull1)
-    sprite.move_to(bull1,0,y)
+def bullet():
+    podgotovka_pyli(bull1,0)
+    podgotovka_pyli(bull2,1920)
+
+
 
 
 @wrap.always(40)
 def movebullet1():
     global bull1,health,armor,size,size2
-    sprite.set_angle(bull1, 90)
     if not sprite.is_visible(bull1):
         return
 
@@ -127,39 +124,25 @@ def movebullet1():
         return
 
 
-    if  sprite.is_collide_sprite(bull1, player):
-        sprite.hide(bull1)
-        sprite.set_costume_next(player)
-        armor -= 1
+    if not sprite.is_collide_sprite(bull1, player):
+        return
+
+    sprite.hide(bull1)
+    sprite.set_costume_next(player)
+    armor -= 1
+    size = sprite.get_height_percent(player)
+    sprite.set_height_percent(player, size - 10)
+    size2 = sprite.get_width_percent(player)
+    sprite.set_height_percent(player, size2 - 10)
+    if armor == -1:
         size = sprite.get_height_percent(player)
-        sprite.set_height_percent(player, size - 10)
-        size -= 10
+        sprite.set_height_percent(player, size + 10)
         size2 = sprite.get_width_percent(player)
-        sprite.set_height_percent(player, size2 - 10)
-        size2 -= 10
-        if armor == -1:
-            size = sprite.get_height_percent(player)
-            sprite.set_height_percent(player, size + 10)
-            size += 10
-            size2 = sprite.get_width_percent(player)
-            sprite.set_height_percent(player, size2 + 10)
-            size2 += 10
-            armor = 0
-            health -=1
-            sprite.show(player)
+        sprite.set_height_percent(player, size2 + 10)
+        armor = 0
+        health -=1
     sprite_text.set_text(healthscore, "health: " + str(health))
     sprite_text.set_text(armorscore, "armor: " + str(armor))
-
-
-
-@wrap.always(10000)
-def bullet2():
-    global bull2
-    sprite.set_size(bull2,30,30)
-    sprite.set_angle(bull2,270)
-    y=random.randint(20,1060)
-    sprite.move_to(bull2,1920,y)
-    sprite.show(bull2)
 
 
 @wrap.always(40)
@@ -182,22 +165,18 @@ def movebullet2():
         armor -= 1
         size = sprite.get_height_percent(player)
         sprite.set_height_percent(player, size - 10)
-        size -= 10
         size2 = sprite.get_width_percent(player)
         sprite.set_height_percent(player, size2 - 10)
-        size2 -= 10
         if armor == -1:
             size = sprite.get_height_percent(player)
             sprite.set_height_percent(player, size + 10)
-            size += 10
             size2 = sprite.get_width_percent(player)
             sprite.set_height_percent(player, size2 + 10)
-            size2 += 10
             armor = 0
             health -=1
             sprite.show(player)
-    sprite_text.set_text(healthscore, "health: " + str(health))
-    sprite_text.set_text(armorscore, "armor: " + str(armor))
+        sprite_text.set_text(healthscore, "health: " + str(health))
+        sprite_text.set_text(armorscore, "armor: " + str(armor))
 
 
 
