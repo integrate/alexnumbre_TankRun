@@ -16,16 +16,21 @@ sprite.set_size(bull2,30,30)
 health =5
 armor=0
 
-healthscore = sprite.add_text(str(health), 50, 50)
-armorscore = sprite.add_text(str(armor), 50, 70)
-sprite_text.set_text(healthscore,"health: " + str(health))
-sprite_text.set_text(armorscore,"armor: "+str(armor))
+healthscore = sprite.add_text("health: "  +str(health), 50, 50)
+armorscore = sprite.add_text("armor: "+str(armor), 50, 70)
+
 x1 = random.randint(20, a-20)
 y1 = random.randint(20, b-20)
 x2 = random.randint(20, a-20)
 y2 = random.randint(20, b-20)
 healthup=sprite.add("battle_city_items",x1,y1,"block_gift_tank")
 armorup=sprite.add("battle_city_items",x2,y2,"block_gift_star")
+
+def updatestat():
+    sprite_text.set_text(healthscore,"health: "+str(health))
+    sprite_text.set_text(armorscore,"armor: "+str(armor))
+
+def updatesize():
 
 
 @wrap.always(5001)
@@ -34,13 +39,12 @@ def healthupp():
     y1=random.randint(20,b-20)
     sprite.move_to(healthup,x1,y1)
 
-@wrap.always(100)
 def collidehealthup():
     global health
     if sprite.is_collide_sprite(player,healthup):
         sprite.move(healthup,2000,1200)
         health+=1
-        sprite_text.set_text(healthscore, "health: " + str(health))
+        updatestat()
 
 
 
@@ -51,7 +55,7 @@ def armorupp():
     sprite.move_to(armorup,x2,y2)
 
 
-@wrap.always(100)
+
 def collidearmor():
     global armor
     if sprite.is_collide_sprite(player,armorup):
@@ -61,7 +65,7 @@ def collidearmor():
         sprite.set_height_percent(player,size+10)
         size2 = sprite.get_width_percent(player)
         sprite.set_height_percent(player, size2 + 10)
-        sprite_text.set_text(armorscore, "armor: " + str(armor))
+        updatestat()
 
 
 @wrap.on_key_always(wrap.K_LEFT,50)
@@ -72,6 +76,8 @@ def move_left():
     sprite.move_at_angle_dir(player,10)
     if x <=20:
         sprite.move_to(player,20,y)
+    collidearmor()
+    collidehealthup()
 
 @wrap.on_key_always(wrap.K_RIGHT,50)
 def move_right():
@@ -81,6 +87,8 @@ def move_right():
     sprite.move_at_angle_dir(player,10)
     if x >=a-20:
         sprite.move_to(player,a-20,y)
+    collidearmor()
+    collidehealthup()
 
 @wrap.on_key_always(wrap.K_UP,50)
 def move_up():
@@ -90,6 +98,8 @@ def move_up():
     sprite.move_at_angle_dir(player,10)
     if y <=20:
         sprite.move_to(player,x,20)
+    collidearmor()
+    collidehealthup()
 
 @wrap.on_key_always(wrap.K_DOWN,50)
 def move_down():
@@ -99,6 +109,9 @@ def move_down():
     sprite.move_at_angle_dir(player,10)
     if y >=b-20:
         sprite.move_to(player,x,b-20)
+    collidearmor()
+    collidehealthup()
+
 
 def podgotovka_pyli(bull,x):
     y = random.randint(20, b-20)
@@ -143,9 +156,7 @@ def movebullet1():
         sprite.set_height_percent(player, size2 + 10)
         armor = 0
         health -=1
-    sprite_text.set_text(healthscore, "health: " + str(health))
-    sprite_text.set_text(armorscore, "armor: " + str(armor))
-
+    updatestat()
 
 @wrap.always(40)
 def movebullet2():
@@ -177,8 +188,7 @@ def movebullet2():
             armor = 0
             health -=1
             sprite.show(player)
-        sprite_text.set_text(healthscore, "health: " + str(health))
-        sprite_text.set_text(armorscore, "armor: " + str(armor))
+        updatestat()
 
 
 
