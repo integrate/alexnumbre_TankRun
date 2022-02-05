@@ -1,15 +1,17 @@
 import wrap,time,random
 from wrap import world,sprite,sprite_text
-
-world.create_world(1920,1080)
+a=1366
+b=738
+world.create_world(a,b)
 world.set_back_color(70,70,70)
-player=sprite.add("battle_city_tanks",960,540,"tank_enemy_size2_purple2")
-y1 = random.randint(20, 1060)
+player=sprite.add("battle_city_tanks",a/2,b/2,"tank_enemy_size2_purple2")
+y1 = random.randint(20, b-20)
 bull1=sprite.add("battle_city_items",0, y1,"bullet")
 sprite.set_size(bull1,30,30)
-y2 = random.randint(20, 1060)
-bull2=sprite.add("battle_city_items", 1920, y2,"bullet")
+y2 = random.randint(20, b-20)
+bull2=sprite.add("battle_city_items", a, y2,"bullet")
 sprite.set_angle(bull2,270)
+sprite.set_angle(bull1,90)
 sprite.set_size(bull2,30,30)
 health =5
 armor=0
@@ -18,18 +20,18 @@ healthscore = sprite.add_text(str(health), 50, 50)
 armorscore = sprite.add_text(str(armor), 50, 70)
 sprite_text.set_text(healthscore,"health: " + str(health))
 sprite_text.set_text(armorscore,"armor: "+str(armor))
-x1 = random.randint(20, 1900)
-y1 = random.randint(20, 1060)
-x2 = random.randint(20, 1900)
-y2 = random.randint(20, 1060)
+x1 = random.randint(20, a-20)
+y1 = random.randint(20, b-20)
+x2 = random.randint(20, a-20)
+y2 = random.randint(20, b-20)
 healthup=sprite.add("battle_city_items",x1,y1,"block_gift_tank")
 armorup=sprite.add("battle_city_items",x2,y2,"block_gift_star")
 
 
 @wrap.always(5001)
 def healthupp():
-    x1=random.randint(20,1900)
-    y1=random.randint(20,1060)
+    x1=random.randint(20,a-20)
+    y1=random.randint(20,b-20)
     sprite.move_to(healthup,x1,y1)
 
 @wrap.always(100)
@@ -44,8 +46,8 @@ def collidehealthup():
 
 @wrap.always(5002)
 def armorupp():
-    x2=random.randint(20,1900)
-    y2=random.randint(20,1060)
+    x2=random.randint(20,a-20)
+    y2=random.randint(20,b-20)
     sprite.move_to(armorup,x2,y2)
 
 
@@ -77,8 +79,8 @@ def move_right():
     y=sprite.get_y(player)
     sprite.set_angle(player,90)
     sprite.move_at_angle_dir(player,10)
-    if x >=1900:
-        sprite.move_to(player,1900,y)
+    if x >=a-20:
+        sprite.move_to(player,a-20,y)
 
 @wrap.on_key_always(wrap.K_UP,50)
 def move_up():
@@ -95,18 +97,18 @@ def move_down():
     y=sprite.get_y(player)
     sprite.set_angle(player,180)
     sprite.move_at_angle_dir(player,10)
-    if y >=1060:
-        sprite.move_to(player,x,1060)
+    if y >=b-20:
+        sprite.move_to(player,x,b-20)
 
 def podgotovka_pyli(bull,x):
-    y = random.randint(20, 1060)
+    y = random.randint(20, b-20)
     sprite.show(bull)
     sprite.move_to(bull, x, y)
 
 @wrap.always(10000)
 def bullet():
     podgotovka_pyli(bull1,0)
-    podgotovka_pyli(bull2,1920)
+    podgotovka_pyli(bull2,a)
 
 
 
@@ -119,7 +121,7 @@ def movebullet1():
 
     x = sprite.get_x(bull1)
     sprite.move_at_angle_dir(bull1, 10)
-    if x >= 1920:
+    if x >= a:
         sprite.hide(bull1)
         return
 
