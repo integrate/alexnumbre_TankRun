@@ -30,8 +30,9 @@ def updatestat():
     sprite_text.set_text(healthscore,"health: "+str(health))
     sprite_text.set_text(armorscore,"armor: "+str(armor))
 
-def updatesize():
-
+def updatesize(num):
+   global size
+   sprite.set_height_proportionally(player,sprite.get_height(player)+num)
 
 @wrap.always(5001)
 def healthupp():
@@ -61,10 +62,7 @@ def collidearmor():
     if sprite.is_collide_sprite(player,armorup):
         sprite.move(armorup, 2000, 1200)
         armor+=1
-        size=sprite.get_height_percent(player)
-        sprite.set_height_percent(player,size+10)
-        size2 = sprite.get_width_percent(player)
-        sprite.set_height_percent(player, size2 + 10)
+        updatesize(10)
         updatestat()
 
 
@@ -124,76 +122,35 @@ def bullet():
     podgotovka_pyli(bull2,a)
 
 
-
-
-@wrap.always(40)
-def movebullet1():
+def howmovebullet(bull):
     global bull1,health,armor,size,size2
-    if not sprite.is_visible(bull1):
+    if not sprite.is_visible(bull):
         return
 
-    x = sprite.get_x(bull1)
-    sprite.move_at_angle_dir(bull1, 10)
-    if x >= a:
-        sprite.hide(bull1)
+    x = sprite.get_x(bull)
+    sprite.move_at_angle_dir(bull, 10)
+    if x >= a+50 or x<-50:
+        sprite.hide(bull)
         return
 
 
-    if not sprite.is_collide_sprite(bull1, player):
+    if not sprite.is_collide_sprite(bull, player):
         return
 
-    sprite.hide(bull1)
-    sprite.set_costume_next(player)
+    sprite.hide(bull)
     armor -= 1
-    size = sprite.get_height_percent(player)
-    sprite.set_height_percent(player, size - 10)
-    size2 = sprite.get_width_percent(player)
-    sprite.set_height_percent(player, size2 - 10)
+    updatesize(-10)
     if armor == -1:
-        size = sprite.get_height_percent(player)
-        sprite.set_height_percent(player, size + 10)
-        size2 = sprite.get_width_percent(player)
-        sprite.set_height_percent(player, size2 + 10)
         armor = 0
         health -=1
+        updatesize(10)
     updatestat()
 
+
+
 @wrap.always(40)
-def movebullet2():
-    global bull2,health,armor,size,size2
-    sprite.set_angle(bull2, 270)
-    if not sprite.is_visible(bull2):
-        return
-
-    x = sprite.get_x(bull2)
-    sprite.move_at_angle_dir(bull2, 10)
-    if x <= 0:
-        sprite.hide(bull2)
-        return
+def movebullet():
+    howmovebullet(bull1)
+    howmovebullet(bull2)
 
 
-    if  sprite.is_collide_sprite(bull2, player):
-        sprite.hide(bull2)
-        sprite.set_costume_next(player)
-        armor -= 1
-        size = sprite.get_height_percent(player)
-        sprite.set_height_percent(player, size - 10)
-        size2 = sprite.get_width_percent(player)
-        sprite.set_height_percent(player, size2 - 10)
-        if armor == -1:
-            size = sprite.get_height_percent(player)
-            sprite.set_height_percent(player, size + 10)
-            size2 = sprite.get_width_percent(player)
-            sprite.set_height_percent(player, size2 + 10)
-            armor = 0
-            health -=1
-            sprite.show(player)
-        updatestat()
-
-
-
-
-@wrap.always(100)
-def debug():
-
-    print(sprite.get_pos(bull1))
