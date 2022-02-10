@@ -5,6 +5,8 @@ b=738
 world.create_world(a,b)
 world.set_back_color(70,70,70)
 player=sprite.add("battle_city_tanks",a/2,b/2,"tank_enemy_size2_purple2")
+startwidth=sprite.get_width(player)
+startheight=sprite.get_height(player)
 y1 = random.randint(20, b-20)
 bull1=sprite.add("battle_city_items",0, y1,"bullet")
 sprite.set_size(bull1,30,30)
@@ -30,9 +32,8 @@ def updatestat():
     sprite_text.set_text(healthscore,"health: "+str(health))
     sprite_text.set_text(armorscore,"armor: "+str(armor))
 
-def updatesize(num):
-   global size
-   sprite.set_height_proportionally(player,sprite.get_height(player)+num)
+def updatesize():
+   sprite.set_size_percent(player,100+armor*10,100+armor*10)
 
 @wrap.always(5001)
 def healthupp():
@@ -62,7 +63,7 @@ def collidearmor():
     if sprite.is_collide_sprite(player,armorup):
         sprite.move(armorup, 2000, 1200)
         armor+=1
-        updatesize(10)
+        updatesize()
         updatestat()
 
 
@@ -123,7 +124,7 @@ def bullet():
 
 
 def howmovebullet(bull):
-    global bull1,health,armor,size,size2
+    global health,armor,size,size2
     if not sprite.is_visible(bull):
         return
 
@@ -139,11 +140,10 @@ def howmovebullet(bull):
 
     sprite.hide(bull)
     armor -= 1
-    updatesize(-10)
     if armor == -1:
         armor = 0
         health -=1
-        updatesize(10)
+    updatesize()
     updatestat()
 
 
